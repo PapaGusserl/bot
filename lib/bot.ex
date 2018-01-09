@@ -1,8 +1,8 @@
 defmodule Bot.Worker do
 
-  def getUpdates(%{update_id: offset, timeout: timeout) do
-    cmd("getUpdates", %{offset: offset, timeout: timeout}
-    %{update_id: update_id, timeout: timeout}
+  def getUpdates(%{update_id: offset, timeout: timeout}) do
+    cmd("getUpdates", %{offset: offset, timeout: timeout})
+    %{update_id: offset, timeout: timeout}
   end
 
   def cmd(method, args) do
@@ -19,6 +19,8 @@ defmodule Bot.Worker do
     process_job(job)
   end
 
-  def process_job(job)
+  def process_job(job) do
+    :noreply
+  end
     
 end
