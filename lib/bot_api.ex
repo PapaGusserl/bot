@@ -17,8 +17,10 @@ defmodule Bot.API do
   end
 
   defp request(opts) do
-    #
-    {:form, opts}
+    opts = opts
+           |> Map.update(:reply_markup, nil, &(Poison.encode!(&1)))
+           |> Enum.filter_map(fn {_, v} -> v end, fn {k, v} -> {k, to_string(v)} end)
+      {:form, opts}
   end
 
   defp read_response(%HTTPoison.Response{body: term, headers: list, request_url: term, status_code: 200}) do
