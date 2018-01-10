@@ -1,10 +1,11 @@
 defmodule Bot.API do
+  alias Bot.Struc.Message
 
   def post(method, opts) do
     url(method)
     |> HTTPoison.post(request(opts), [], [timeout: timeout()])
     |> read_response
-   #|> parse(method)
+    |> parse(method)
   end
 
   defp url(method) do
@@ -53,11 +54,50 @@ defmodule Bot.API do
    end
 
    def parse_value(agent, result) do
-     struct(agent, Enum.map(result, &(parse_value(&1))))
+     Enum.map(result, &(parse_value(&1)))
+     |> Enum.map(&(struct(agent, &1 )))
    end
 
-   def parse_value({key, value}) do
-     {key, Enum.map(value, &(parse_value(&1)))}
+   def parse_value(%{message: body}) do
+     IO.puts "#{inspect body}"
+     [chat: _, date: _, entities: _, from: _, message_id: _, text: text] = Enum.map(body, &(parse_value(&1)))
+     [{:text, text}]
    end
 
-end  
+   def parse_value({:text, value}) do
+     IO.puts "#{inspect value}"
+     {:text, value}
+    end
+   def parse_value(%{chat: value}) do
+     IO.puts "#{inspect value}"
+     {:chat, value}
+    end
+
+
+   def parse_value(tuple) do
+     tuple
+   end
+@moduledoc """
+   def parse_value({:text, text}) do
+     {:text, text}
+   end
+
+   def parse_value({:chat, _ }) do
+     nil
+   end
+   def parse_value({:date, _ }) do
+     nil
+   end
+   def parse_value({:entities, _ }) do
+     nil
+   end
+   def parse_value({:from, _ }) do
+     nil
+   end
+   def parse_value({:message_id, _ }) do
+     nil
+   end
+"""
+end
+
+ 
