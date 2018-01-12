@@ -13,6 +13,6 @@ defmodule User do
   defstruct user_id: nil
 end
   defmodule Update do
-    defstruct update_id: nil, message: nil
+    defstruct update_id: nil, message: %Bot.Struc.Message{}
   end
 end

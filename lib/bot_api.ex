@@ -1,6 +1,8 @@
 defmodule Bot.API do
   alias Bot.Struc.Message
-
+  alias Bot.Struc.Update
+  alias Bot.Struc.User
+  
   def post(method, opts) do
     url(method)
     |> HTTPoison.post(request(opts), [], [timeout: timeout()])
@@ -40,9 +42,9 @@ defmodule Bot.API do
 
    def parse(result, method) do
      case method do
-       "getUpdates" -> 
+       :getUpdates -> 
          parse_value(:updates, result)
-       "getMe" ->
+       :getMe ->
          parse_value(User, result)
        _ -> 
          parse_value(Message, result)
@@ -52,52 +54,31 @@ defmodule Bot.API do
    def parse_value(:updates, result) do 
      Enum.map(result, &(parse_value(Update, &1)))
    end
-
    def parse_value(agent, result) do
-     Enum.map(result, &(parse_value(&1)))
-     |> Enum.map(&(struct(agent, &1 )))
+     struct(agent, Enum.map(result, &(parse_value(&1))))    
    end
-
    def parse_value(%{message: body}) do
-     IO.puts "#{inspect body}"
-     [chat: _, date: _, entities: _, from: _, message_id: _, text: text] = Enum.map(body, &(parse_value(&1)))
-     [{:text, text}]
+    #Enum.map(body, &(parse_value(&1)))    
+     Enum.map(body, &(parse_value(Message, &1)))
    end
-
-   def parse_value({:text, value}) do
-     IO.puts "#{inspect value}"
-     {:text, value}
-    end
    def parse_value(%{chat: value}) do
-     IO.puts "#{inspect value}"
-     {:chat, value}
+     Enum.map(value, &(parse_value(&1)))
     end
-
-
+   def parse_value(%{entities: value}) do
+     Enum.map(value, &(parse_value(&1)))
+    end
+   def parse_value(%{from: value}) do
+     Enum.map(value, &(parse_value(&1)))
+   end  
+   def parse_value(%{document: value}) do
+     Enum.map(value, &(parse_value(&1)))
+   end
+   def parse_value(%{from: value}) do
+     Enum.map(value, &(parse_value(&1)))
+   end  
    def parse_value(tuple) do
-     tuple
-   end
-@moduledoc """
-   def parse_value({:text, text}) do
-     {:text, text}
-   end
-
-   def parse_value({:chat, _ }) do
-     nil
-   end
-   def parse_value({:date, _ }) do
-     nil
-   end
-   def parse_value({:entities, _ }) do
-     nil
-   end
-   def parse_value({:from, _ }) do
-     nil
-   end
-   def parse_value({:message_id, _ }) do
-     nil
-   end
-"""
+      tuple
+   end   
 end
 
  
