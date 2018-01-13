@@ -20,7 +20,14 @@ defmodule Bot.Worker do
   end
 
   def process_job(job) do
-    :noreply
+    Bot.Api.parse(:decod, job)
+    |> read_command
   end
+
+  def read_command(%{text: "/start", id: id}), do: cmd(:sendMessage, %{chat_id: id, text: Menu.start_message(), reply_markup: %{keyboard: Menu.rows() } }, end
+
+  def read_command(%{text: "/hello", id: id}), do: cmd(:sendMessage, %{text: "Hello, world!", chat_id: id}), end
+
+    
     
 end

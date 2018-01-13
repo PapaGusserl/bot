@@ -10,7 +10,7 @@ defmodule Message do
     end
 
 defmodule User do
-  defstruct user_id: nil
+  defstruct id: nil, is_bot: nil, first_name: nil, last_name: nil, username: nil, language_code: nil
 end
   defmodule Update do
     defstruct update_id: nil, message: %Bot.Struc.Message{}
