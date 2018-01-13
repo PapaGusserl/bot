@@ -15,8 +15,8 @@ defmodule Bot.API do
   end
 
   defp token do
-    "537321635:AAED7FVU2uECKmfkrea3XSL1app7kDe7Js0"
-  end
+    ImpShit.token
+ end
 
   defp timeout() do
     #
