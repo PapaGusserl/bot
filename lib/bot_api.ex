@@ -58,8 +58,7 @@ defmodule Bot.API do
      struct(agent, Enum.map(result, &(parse_value(&1))))    
    end
    def parse_value(%{message: body}) do
-    #Enum.map(body, &(parse_value(&1)))    
-     Enum.map(body, &(parse_value(Message, &1)))
+     parse_value(Message, body)
    end
    def parse_value(%{chat: value}) do
      Enum.map(value, &(parse_value(&1)))

@@ -9,14 +9,14 @@ defmodule Bot.Server do
     GenServer.cast(pid, :bot)
   end
 
-  def handle_cast(:bot, _from, state) do
+  def handle_cast(:bot, state) do
     do_pool(state)
     {:noreply, state}
   end
 
   def do_pool(args) do
-    %{"update_id" => update_id } = Bot.Worker.getUpdates(args)
-    do_pool(%{timeout: args[:timeout], update_id: update_id + 1})
+    %{update_id: update_id } = Bot.Worker.getUpdates(args)
+    handle_cast(:bot, %{timeout: args[:timeout], update_id: update_id })
   end
 
 end
