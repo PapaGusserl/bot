@@ -1,4 +1,4 @@
-defmodule Menu do
+defmodule Menu.Akhtyamov do
 
   def rows do
     [

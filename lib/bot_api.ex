@@ -3,19 +3,19 @@ defmodule Bot.API do
   alias Bot.Struc.Update
   alias Bot.Struc.User
   
-  def post(method, opts) do
-    url(method)
+  def post(bot, method, opts) do
+    url(bot, method)
     |> HTTPoison.post(request(opts), [], [timeout: timeout()])
     |> read_response
     |> parse(method)
   end
 
-  defp url(method) do
-    "https://api.telegram.org/bot#{token()}/#{to_string(method)}"
+  defp url(bot, method)  do
+    "https://api.telegram.org/bot#{token(bot)}/#{to_string(method)}"
   end
 
-  defp token do
-    ImpShit.token
+  defp token(bot) do
+    ImpShit.token(bot)
  end
 
   defp timeout() do
@@ -36,8 +36,8 @@ defmodule Bot.API do
     result
   end
 
-  defp read_response(%HTTPoison.Response{body: term, status_code: 404}) do
-    #
+  defp read_response({:error, %HTTPoison.Error{id: nil, reason: :timeout}}) do
+    %{message: [%{error: "timeout"}]}
    end
 
    def parse(result, method) do

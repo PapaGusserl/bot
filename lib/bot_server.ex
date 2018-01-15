@@ -1,4 +1,4 @@
-defmodule Bot.Server do
+defmodule Bot.Akhtyamov.Server do
   use GenServer
 
   def start_link(args) do
@@ -17,7 +17,7 @@ defmodule Bot.Server do
   end
 
   def do_pool(args) do
-    %{update_id: update_id } = Bot.Worker.getUpdates(args)
+    %{update_id: update_id } = Bot.Worker.getUpdates(:akhtyamov, args)
     handle_cast(:bot, %{timeout: args[:timeout], update_id: update_id })
   end
 
