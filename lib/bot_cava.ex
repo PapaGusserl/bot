@@ -3,7 +3,7 @@ defmodule Bot.Cava do
  
   def read_command(%{text: "/start", chat: %{id: id}, from: %{first_name: name, username: user}}) do
     cmd(:cava_nch, :sendMessage, %{chat_id: 415311574, text: "User #{name} with username #{user} join to Cava"})
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: Menu.Cava.start_message(), reply_markup: %{keyboard: Menu.Cava.rows() } })
+    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: Menu.Cava.start_message(), reply_markup: %{keyboard: Menu.Cava.rows(), one_time_keyboard: false } })
     :dets.insert_new(:user_of_cava, {id, name, user})
   end 
  
@@ -13,10 +13,10 @@ defmodule Bot.Cava do
     :dets.insert_new(:user_of_cava, {id, name, :no})
   end 
 
-  def read_command(%{type: photo, media: file_id, chat: %{id: 415311574}}) do
+  def read_command(%{photo: [%{file_id: photo}, _, _, _], chat: %{id: 415311574}}) do
     IO.puts "Photo"
     :dets.select(:user_of_cava, [{:"$1", [], [:"$1"]}])
-    |>Enum.map(fn {id, _, _} -> cmd(:cava_nch, :sendPhoto, %{chat_id: id, type: photo, media: file_id}) end)
+    |>Enum.map(fn {id, _, _} -> cmd(:cava_nch, :sendPhoto, %{chat_id: id, photo: photo}) end)
   end
 
 def read_command(%{text: text, chat: %{id: 415311574}}) do
