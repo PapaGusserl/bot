@@ -6,8 +6,8 @@ defmodule Bot.API do
   def post(bot, method, opts) do
     url(bot, method)
     |> HTTPoison.post(request(opts), [], [timeout: timeout()])
-    |> read_response
-    |> parse(method)
+    |> read_response(method)
+   #|> parse(method)
   end
 
   defp url(bot, method)  do
@@ -30,14 +30,14 @@ defmodule Bot.API do
       {:form, opts}
   end
 
-  defp read_response({:ok, %HTTPoison.Response{body: term, status_code: 200}}) do
+  defp read_response({:ok, %HTTPoison.Response{body: term, status_code: 200}}, method) do
     %{result: result} = term
       |> Poison.decode!(keys: :atoms)
-    result
+    parse(result, method)
   end
 
   defp read_response({:error, %HTTPoison.Error{id: nil, reason: :timeout}}) do
-    %{message: [%{error: "timeout"}]}
+    [%{error: "timeout"}]
    end
 
    def parse(result, method) do

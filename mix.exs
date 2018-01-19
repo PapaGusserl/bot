@@ -14,16 +14,17 @@ defmodule Bot.Mixfile do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
-                     mod: {Bot, []}
+      extra_applications: [:logger]
+#                    mod: {Bot, []}
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-       {   :poison, "~> 3.1"}, 
-       {:httpoison, "~> 1.0"}
+       {   :poison, "~> 1.4"}, 
+      {:httpoison, "~> 1.0"},
+      {:mailgun, "~> 0.1.2"}
     ]
   end
 end
