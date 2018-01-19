@@ -52,6 +52,10 @@ defmodule Bot.Cava do
   #def read_command(%{text: ""}), do:
   #def read_command(%{text: "", from: %{first_name: name}}), do:
   
+  def read_command(%{location: %{latitude: lat, longitude: long}, chat: %{id: id}}) do
+    {how_much, where} = find_cava("#{lat},#{long}")
+    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Пожалуйста, направляйтесь в #{where}, до кофейни осталось #{how_much}"})
+  end
   def read_command(%{text: "Меню", chat: %{id: id}}), do: 
     cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Выберете, пожалуйста, категорию", reply_markup: %{keyboard: Menu.Cava.kategories(), one_time_keyboard: true } })
 
@@ -113,11 +117,24 @@ defmodule Bot.Cava do
     # Private Box #
     ###############
 
-     def  send_letter(text) do   
-       IO.puts text
+     def  send_letter(text), do:   
        send_email to: "akhtyamov.vlad@outlook.com",
-             from: "vlad@papagusserl.com",
-          subject: "Email from CavaBot",
-       text: text 
+                from: "vlad@papagusserl.com",
+             subject: "Email from CavaBot",
+                text: text 
+
+     def find_cava(lng) do
+       it_park_chelny = "55.738447,52.450314"
+       sity_centr = "55.741005,52.414335"
+       objects = it_park_chelny <> "|" <> sity_centr
+       %{it: dist, centr: dist2} = Bot.Dist.API.get(lng, objects) 
+       {it, _} = Float.parse(dist)
+       {centr, _} = Float.parse(dist2)
+       if it < centr do
+         {dist, "ИТ парк, Корпус А, 1 этаж"}
+       else
+         {dist2, "Бизнес Центр 2/18, Корпус Б, 1 этаж"}
+       end
      end
+
 end
