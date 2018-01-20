@@ -2,7 +2,8 @@ defmodule Bot.API do
   alias Bot.Struc.Message
   alias Bot.Struc.Update
   alias Bot.Struc.User
-  
+  alias Bot.Struc.Callback
+
   def post(bot, method, opts) do
     url(bot, method)
     |> HTTPoison.post(request(opts), [], [timeout: timeout()])
@@ -56,6 +57,9 @@ defmodule Bot.API do
    end
    def parse_value(agent, result) do
      struct(agent, Enum.map(result, &(parse_value(&1))))    
+   end
+   def parse_value(%{callback_query: %{message: message}}) do
+     parse_value(Message, message)
    end
    def parse_value(%{message: body}) do
      parse_value(Message, body)

@@ -9,6 +9,13 @@ defmodule Menu.Akhtyamov do
     ]
   end
 
+  def prices do
+    [
+      %{label: "coffee", amount: 45},
+      %{label: "tea"   , amount: 78}
+    ]
+  end
+
   def start_message do
     "Hello, Dear friend! Welcome to beta-beta bot!/n '/hello' - and bot say you hello. Write /whoami and bot say to you, who are you."
   end

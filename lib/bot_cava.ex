@@ -12,13 +12,13 @@ defmodule Bot.Cava do
   def read_command(%{text: "/start", chat: %{id: id}, from: %{first_name: name, username: user}}) do
     cmd(:cava_nch, :sendMessage, %{chat_id: 415311574, text: "User #{name} with username #{user} join to Cava"})
     cmd(:cava_nch, :sendMessage, %{chat_id: id, text: Menu.Cava.start_message(), reply_markup: %{keyboard: Menu.Cava.rows(), one_time_keyboard: false } })
-    :dets.insert_new(:user_of_cava, {id, name, user})
+    :dets.insert_new(:user_of_cava, {id, name, user, %{bookmarks: ["Закладки:\n"]}, %{history: ["Вернуться домой"]}})
   end 
  
   def read_command(%{text: "/start", chat: %{id: id}, from: %{first_name: name}}) do
     cmd(:cava_nch, :sendMessage, %{chat_id: 415311574, text: "User #{name} with-out username join to Cava"})
     cmd(:cava_nch, :sendMessage, %{chat_id: id, text: Menu.Cava.start_message(), reply_markup: %{keyboard: Menu.Cava.rows() } })
-    :dets.insert_new(:user_of_cava, {id, name, :no})
+    :dets.insert_new(:user_of_cava, {id, name, "no-username", %{bookmarks: ["Закладки:\n"]}, %{history: ["Вернуться домой"]}})
   end 
 
   ####################
@@ -56,62 +56,64 @@ defmodule Bot.Cava do
     {how_much, where} = find_cava("#{lat},#{long}")
     cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Пожалуйста, направляйтесь в #{where}, до кофейни осталось #{how_much}"})
   end
-  def read_command(%{text: "Меню", chat: %{id: id}}), do: 
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Выберете, пожалуйста, категорию", reply_markup: %{keyboard: Menu.Cava.kategories(), one_time_keyboard: true } })
 
-  def read_command(%{text: "Вернуться домой", chat: %{id: id}}), do: 
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Вы вернулись в основное меню", reply_markup: %{keyboard: Menu.Cava.rows(), one_time_keyboard: false } })
-
-  def read_command(%{text: "Вернуться к чаям", chat: %{id: id}}), do: 
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Выберете, пожалуйста, категорию", reply_markup: %{keyboard: Menu.Cava.tea(), one_time_keyboard: true } })
-
-  def read_command(%{text: "Кофейная карта", chat: %{id: id}}), do: 
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Здесь Вы можете увидеть имеющийся у нас ассортимент кофе и напитков на основе эспрессо", reply_markup: %{keyboard: Menu.Cava.coffee(), one_time_keyboard: false } })
-
-  def read_command(%{text: "Чайная карта", chat: %{id: id}}), do: 
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Здесь Вы можете увидеть имеющийся у нас ассортимент фирменного чая, приготавливаемого нашими баристами, а также чай от немецкой комании Ronniefildt", reply_markup: %{keyboard: Menu.Cava.tea(), one_time_keyboard: false } })
-
-  def read_command(%{text: "Холодные напитки", chat: %{id: id}}), do: 
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "В этой категории представлены холодные напитки, которыми можно утолить жажду в жаркий день или же побаловать себя", reply_markup: %{keyboard: Menu.Cava.cold(), one_time_keyboard: true } })
-
-  def read_command(%{text: "Фирменные напитки", chat: %{id: id}}), do: 
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Наш шеф-бариста подобрал для Вас лучшие комбинации на любой вкус, каждому найдется немного Coffee Cava", reply_markup: %{keyboard: Menu.Cava.firm(), one_time_keyboard: false } })
-
-  def read_command(%{text: "Фирменные чаи", chat: %{id: id}}), do: 
-  cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Наши фирменные чаи в чашках и чайниках", reply_markup: %{keyboard: Menu.Cava.firm_tea(), one_time_keyboard: false } })
-  
-  def read_command(%{text: "Чай Ronnenfeldt в чашке", chat: %{id: id}}), do: 
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Здесь представлены чаи от немецкой компании Ronnenfeldt, подаваемые в чашке", reply_markup: %{keyboard: Menu.Cava.ron_tea_cup(), one_time_keyboard: false } })
-  
-    def read_command(%{text: "Чай Ronnenfeldt в чайнике", chat: %{id: id}}), do: 
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Здесь ВЫ можете увидеть чай Ronnenfeldt, подаваемый в чайниках ", reply_markup: %{keyboard: Menu.Cava.ron_tea(), one_time_keyboard: false } })
-    
-    def read_command(%{text: "Десерты", chat: %{id: id}}), do: 
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Наши десерты", reply_markup: %{keyboard: Menu.Cava.deserts(), one_time_keyboard: false } })
-    
-    def read_command(%{text: "Сендвичи и снеки", chat: %{id: id}}), do: 
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Наши сытные и очень вкусные сендвичи и роллы", reply_markup: %{keyboard: Menu.Cava.snack(), one_time_keyboard: false } })
-    
-    def read_command(%{text: "Отправить сообщение разработчику", chat: %{id: id}}), do: 
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Введите пожалуйста, текст сообщения в поле в формате \n Тема:Ваша_тема\nТекст: Ваш_текст"})
-
-    def read_command(%{text: "Фирменные чаи", chat: %{id: id}}), do: 
-    cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Ароматные, витаминные, незаменимые фирменные чаи", reply_markup: %{keyboard: Menu.Cava.firm_tea(), one_time_keyboard: false } })
-    def read_command(%{text: text, chat: %{id: id},  from: %{first_name: name}}) do 
-      file_id = :dets.match(:menu, {text, :"$1"})
-      theme = ~r/Тема:/
-      letter = ~r/Текст:/
-      if file_id==[] do
-        if text =~ theme && text =~ letter do
-          send_letter(text)
-        else
-        cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Извините, #{name}, насчет этого вопроса я пока не могу Вам помочь, но чтобы ускорить процесс решения Вашей проблемы, Вы можете написать пользователю @papa_gusserl "})
-        end
-      else
-        [[photo]] = file_id
-        cmd(:cava_nch, :sendPhoto, %{chat_id: id, photo: photo})
+  def read_command(%{text: text, chat: %{id: id}}, after_back \\ false) do
+    [[name, user, %{bookmarks: bookmarks}, %{history: history }]] = :dets.match(:user_of_cava, {id , :"$1", :"$2", :"$3", :"$4"})
+    if text == "Назад" do
+      history = List.delete_at(history, Enum.count(history) - 1)
+      :dets.insert(:user_of_cava, {id, name, user, %{bookmarks: bookmarks}, %{history: history}})
+      read_command(%{text: List.last(history), chat: %{id: id}}, true)
+    else
+      [h|t] = history
+      history = if Enum.count(history) > 10, do: t, else: history
+      unless after_back, do: :dets.insert(:user_of_cava, {id, name, user, %{bookmarks: bookmarks}, %{history: history ++ [text]}})
+      case text do
+        "Меню"                              -> command(id, "Выберете, пожалуйста, категорию", Menu.Cava.kategories())
+        "Вернуться домой"                   -> command(id, "Выберете, пожалуйста, категорию", Menu.Cava.rows())
+        "Кофейная карта"                    -> command(id, "Здесь Вы можете увидеть имеющийся у нас ассортимент кофе и напитков на основе эспрессо", Menu.Cava.coffee())
+        "😋Акции"                           -> command(id, "Наши акции", Menu.Cava.discounts())
+        "Оставить отзыв"                    -> command(id, "Пожалуйста, введите свой отзыв в формате \"Отзыв: Ваш отзыв\"", Menu.Cava.rows())
+        "Чайная карта"                      -> command(id, "Наши чаи", Menu.Cava.tea())
+        "Вернуться к чаям"                  -> command(id, "Наши чаи", Menu.Cava.tea())
+        "Закладки"                          -> command(id, "#{inspect bookmarks }", Menu.Cava.rows())
+        "Фирменные напитки"                 -> command(id, "Фирменные напитки Coffee Cava", Menu.Cava.firm())
+        "Фирменный чай"                     -> command(id, "Фирменные чаи", Menu.Cava.firm_tea())
+        "Десерты"                           -> command(id, "Наши десерты", Menu.Cava.deserts())
+        "Холодные напитки"                  -> command(id, "Наши холодные напитки", Menu.Cava.cold())
+        "Сендвичи и снеки"                  -> command(id, "Сытные и легкие сендвичи на любой вкус", Menu.Cava.snack())
+        "Чай Ronnenfeldt в чайнике"         -> command(id, "Ароматные немецкие чаи", Menu.Cava.ron_tea())
+        "Чай Ronnenfeldt в чашке"           -> command(id, "Ароматные немецкие чаи", Menu.Cava.ron_tea_cup())
+        "Отправить сообщение разработчику"  -> command(id, "Введите пожалуйста, текст сообщения в поле в формате \n Тема:Ваша_тема\nТекст: Ваш_текст", Menu.Cava.rows())
+        "В закладки"                        -> :dets.insert(:user_of_cava, {id, name, user, %{bookmarks: bookmarks ++ [List.last(history)]}, %{history: history}})
+                                             command(id, "Позиция добавлена в Ваши закладки", Menu.Cava.funcs())
+        _                                   -> 
+          file_id = :dets.match(:menu, {text, :"$1"})
+          theme = ~r/Тема:/
+          recens = ~r/Отзыв:/
+          letter = ~r/Текст:/
+          if file_id==[] do
+            if text =~ theme && text =~ letter do
+              send_letter(text)
+              cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Ваше письмо отправлено!"})
+            else
+              if text =~ recens do
+                cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Большое спасибо за Ваш отзыв"})
+                cmd(:cava_nch, :sendMessage, %{chat_id: 415311574, text: "User #{user} write:\n #{text}"})
+              else
+                cmd(:cava_nch, :sendMessage, %{chat_id: id, text: "Извините, #{name}, насчет этого вопроса я пока не могу Вам помочь, но чтобы ускорить процесс решения Вашей проблемы, Вы можете написать пользователю @papa_gusserl "})
+              end
+            end
+          else
+            [[photo]] = file_id
+            cmd(:cava_nch, :sendPhoto, %{chat_id: id, photo: photo, reply_markup: %{keyboard: Menu.Cava.funcs()}})
+          end
       end
-    end
+    end   
+  end
+
+  def command(id, text, keyboard), do: cmd(:cava_nch, :sendMessage, %{chat_id: id, text: text, reply_markup: %{keyboard: keyboard}})
+
+    
 
     ###############
     # Private Box #
@@ -138,3 +140,4 @@ defmodule Bot.Cava do
      end
 
 end
+
