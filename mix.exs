@@ -15,7 +15,7 @@ defmodule Bot.Mixfile do
   def application do
     [
       extra_applications: [:logger]
-#                    mod: {Bot, []}
+                    mod: {Bot, []}
     ]
   end
 
