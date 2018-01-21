@@ -32,7 +32,7 @@ defmodule Bot.Cava do
 
  def read_command(%{photo: [%{file_id: photo},  _, _], caption: "Отправить", chat: %{id: 415311574}}) do
    :dets.select(:user_of_cava, [{:"$1", [], [:"$1"]}])
-   |>Enum.map(fn {id, _, _, _, _} -> cmd(:cava_nch, :sendPhoto, %{chat_id: id, photo: photo}) end)
+   |>Enum.map(fn {id, _, _, %{bookmarks: _}, %{history: _}} -> cmd(:cava_nch, :sendPhoto, %{chat_id: id, photo: photo}) end)
  end
 
   def read_command(%{photo: [%{file_id: photo}, _, _, _], caption: caption, chat: %{id: 415311574}}) do
@@ -41,7 +41,7 @@ defmodule Bot.Cava do
  
   def read_command(%{text: text, chat: %{id: 415311574}}) do
     :dets.select(:user_of_cava, [{:"$1", [], [:"$1"]}])
-    |>Enum.map(fn {id, _, _, _, _} -> cmd(:cava_nch, :sendMessage, %{chat_id: id, text: text}) end)
+    |>Enum.map(fn {id, _, _, %{bookmarks: _}, %{history: _}} -> cmd(:cava_nch, :sendMessage, %{chat_id: id, text: text}) end)
   end
 
  
