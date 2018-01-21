@@ -5,7 +5,7 @@ use Supervisor
     :dets.open_file(:menu, [type: :set])
     Supervisor.start_link([
       {Bot.Akhtyamov.Supervisor, [%{update_id: 0, timeout: 5000}]},
-      {Bot.Cava.Supervisor, [%{update_id: 0, timeout: 50}]}
+      {Bot.Cava.Supervisor, [%{update_id: 0, timeout: 5000}]}
     ], strategy: :one_for_one)
   end
 
