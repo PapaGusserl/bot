@@ -24,6 +24,7 @@ defmodule Bot.Mixfile do
     [
        {   :poison, "~> 1.4"}, 
       {:httpoison, "~> 1.0"},
+      {:distillery, "~> 1.4"},
       {:mailgun, "~> 0.1.2"}
     ]
   end

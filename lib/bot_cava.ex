@@ -58,6 +58,7 @@ defmodule Bot.Cava do
   end
 
   def read_command(%{text: text, chat: %{id: id}}, after_back \\ false) do
+    IO.puts id
     [[name, user, %{bookmarks: bookmarks}, %{history: history }]] = :dets.match(:user_of_cava, {id , :"$1", :"$2", :"$3", :"$4"})
     if text == "Назад" do
       history = List.delete_at(history, Enum.count(history) - 1)
