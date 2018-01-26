@@ -32,7 +32,7 @@ defmodule Bot.Mixfile do
       {:httpoison, "~> 1.0"},
       {:distillery, "~> 1.4"},
       {:mailgun, "~> 0.1.2"},
-      {:edeliver, "~> 1.4"}
+      {:edeliver, "~> 1.4.2"}
     ]
   end
 end
