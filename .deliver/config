@@ -1,0 +1,9 @@
+APP="bot"
+
+BUILD_HOST="185.159.128.191"
+BUILD_USER="deployer"
+BUILD_AT="/home/deployer/tmp"
+
+PRODUCTION_HOST="185.159.128.191"
+PRODUCTION_USER="deployer"
+DELIVER_TO="/home/deployer/"

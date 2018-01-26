@@ -29,14 +29,14 @@ environment :dev do
   # the --env flag to Distillery explicitly if you want to use
   # dev mode.
   set dev_mode: true
-  set include_erts: true
-  set cookie: :"TDeO|%BDHrlA?U$~t?mJO}=W>P9pGVb5QI!(:4RSL,4@|cKu(e|c:^V5HA^?czX8"
+  set include_erts: false
+  set cookie: :"{3gz:cO}D~!}<D.}%@/MaKYQ13IO5rFvd8i`@SVT=5YT?_VzoPp~W8QL{0qxon1D"
 end
 
 environment :prod do
   set include_erts: true
   set include_src: false
-  set cookie: :"OFxLXk%g|:&OZ~1|,YzF,=E;=mm%}A>7Ia,karYT:pI66WkqhZWGN@]W}.pQ]KCm"
+  set cookie: :"T{KW(s|(i^U~)CI0/F}EWM4EH*=0)nwqygmn7~5I6rQiO^HhS1BYRU@r7awR%%lE"
 end
 
 # You may define one or more releases in this file.
