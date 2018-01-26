@@ -47,6 +47,7 @@ end
 release :bot do
   set version: current_version(:bot)
   set applications: [
+    :httpoison,
     :runtime_tools
   ]
 end
